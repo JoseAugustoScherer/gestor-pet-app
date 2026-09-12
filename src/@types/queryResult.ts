@@ -1,5 +1,3 @@
-export interface IQueryResult<T> {
-    success: boolean;
-    data?: T;
-    error?: unknown;
-}
+export type IQueryResult<T> =
+  | { success: true; data: T }
+  | { success: false; error?: unknown };
