@@ -1,14 +1,16 @@
-import { IInsertResult } from "../../@types/insertResult";
-import { ITutorProps } from "../../@types/tutor";
+import { IQueryResult } from "../../@types/queryResult";
+import { INewTutor, ITutor } from "../../@types/tutor";
 import { TABLE_TUTOR } from "../../constants/tables";
 import showError from "../log/showError";
 import dataBase from "../openDataBase";
 
+const table = TABLE_TUTOR;
+
 // CRUD
-export const insertTutor = (tutor: ITutorProps) : IInsertResult => 
+export const insertTutor = (tutor: INewTutor): IQueryResult<number> => 
 {
     const sql = 
-    `INSERT INTO ${TABLE_TUTOR}(
+    `INSERT INTO ${table}(
         name,
         phone,
         email,
@@ -28,12 +30,35 @@ export const insertTutor = (tutor: ITutorProps) : IInsertResult =>
 
         return {
             success: true,
-            id: result.lastInsertRowId,
+            data: result.lastInsertRowId
         }
     } catch (error) {
         showError({
             file: "tutorDAO",
             operation: "insertTutor",
+            error
+        });
+        return {
+            success: false,
+        };
+    }
+}
+
+export const getAllTutors = (): IQueryResult<ITutor[]> =>
+{
+    try {
+        const sql = `SELECT * FROM ${table};`
+
+        const result = dataBase.getAllSync<ITutor>(sql);
+
+        return {
+            success: true,
+            data: result
+        };
+    } catch (error) {
+        showError({
+            file: "tutorDAO",
+            operation: "getAllTutors",
             error
         });
         return {
