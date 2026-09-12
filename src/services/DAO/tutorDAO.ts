@@ -77,8 +77,9 @@ export const updateTutor = (tutor: ITutor): IQueryResult<number> =>
         name = ?,
         phone = ?,
         email = ?,
-        address = ?
-    WHERE id = ?;
+        address = ?,
+        isSync = 0
+    WHERE id_prov = ?;
     `
 
     try {
@@ -88,7 +89,7 @@ export const updateTutor = (tutor: ITutor): IQueryResult<number> =>
             tutor.phone,
             tutor.email || null,
             tutor.address || null,
-            tutor.id
+            tutor.id_prov
         ];
 
         const result = dataBase.runSync( sql, values );
@@ -109,16 +110,16 @@ export const updateTutor = (tutor: ITutor): IQueryResult<number> =>
     }
 }
 
-export const deleteTutor = (id: number): IQueryResult<number> =>
+export const deleteTutor = (id_prov: number): IQueryResult<number> =>
 {
     const sql = 
         `
-        DELETE FROM ${table} WHERE id = ?
+        DELETE FROM ${table} WHERE id_prov = ?
         `
 
     try {
         
-        const values = [ id ]
+        const values = [ id_prov ]
 
         const result = dataBase.runSync( sql, values );
 

@@ -6,11 +6,13 @@ const createTutorTable = () => {
     try {
         dataBase.runSync(
             `CREATE TABLE IF NOT EXISTS ${TABLE_TUTOR}(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER,
+                id_prov INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 phone TEXT NOT NULL,
                 email TEXT,
-                address TEXT
+                address TEXT,
+                isSync INTEGER DEFAULT 0
             )`
         );
 
