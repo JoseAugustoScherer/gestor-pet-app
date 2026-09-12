@@ -10,12 +10,14 @@ const table = TABLE_TUTOR;
 export const insertTutor = (tutor: INewTutor): IQueryResult<number> => 
 {
     const sql = 
-    `INSERT INTO ${table}(
+    `
+    INSERT INTO ${table}(
         name,
         phone,
         email,
         address
-    ) VALUES ( ?, ?, ?, ? );`
+    ) VALUES ( ?, ?, ?, ? );
+    `
 
     try {
         const values = 
@@ -59,6 +61,75 @@ export const getAllTutors = (): IQueryResult<ITutor[]> =>
         showError({
             file: "tutorDAO",
             operation: "getAllTutors",
+            error
+        });
+        return {
+            success: false,
+        };
+    }
+}
+
+export const updateTutor = (tutor: ITutor): IQueryResult<number> =>
+{
+    const sql = 
+    `
+    UPDATE ${table} set
+        name = ?,
+        phone = ?,
+        email = ?,
+        address = ?
+    WHERE id = ?;
+    `
+
+    try {
+        const values = 
+        [
+            tutor.name,
+            tutor.phone,
+            tutor.email || null,
+            tutor.address || null,
+            tutor.id
+        ];
+
+        const result = dataBase.runSync( sql, values );
+
+        return {
+            success: true,
+            data: result.changes
+        };
+    } catch (error) {
+        showError({
+            file: "tutorDAO",
+            operation: "updateTutor",
+            error
+        });
+        return {
+            success: false,
+        };
+    }
+}
+
+export const deleteTutor = (id: number): IQueryResult<number> =>
+{
+    const sql = 
+        `
+        DELETE FROM ${table} WHERE id = ?
+        `
+
+    try {
+        
+        const values = [ id ]
+
+        const result = dataBase.runSync( sql, values );
+
+        return {
+            success: true,
+            data: result.changes
+        };
+    } catch (error) {
+        showError({
+            file: "tutorDAO",
+            operation: "deleteTutor",
             error
         });
         return {
