@@ -12,13 +12,13 @@ const createTutorTable = () => {
                 phone TEXT NOT NULL,
                 email TEXT,
                 address TEXT,
-                isSync INTEGER DEFAULT 0
+                is_sync INTEGER DEFAULT 0 NOT NULL
             )`
         );
 
         return true;
     } catch (error: unknown) {
-        showError({ file: 'tutor.ts', operation: 'createTableTutor', error });
+        showError({ file: 'createTutorTable.ts', operation: 'createTableTutor', error });
         return false;
     }
 }

@@ -78,7 +78,7 @@ export const updateTutor = (tutor: ITutor): IQueryResult<number> =>
         phone = ?,
         email = ?,
         address = ?,
-        isSync = 0
+        is_sync = 0
     WHERE id_prov = ?;
     `
 
