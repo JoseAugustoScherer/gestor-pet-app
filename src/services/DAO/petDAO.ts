@@ -19,7 +19,7 @@ export const insertPet = (pet: INewPet): IQueryResult<number> =>
         weight,
         observation
     ) VALUES ( ?, ?, ?, ?, ?, ? );
-    `
+    `;
 
     try {
         const values = 
@@ -46,6 +46,7 @@ export const insertPet = (pet: INewPet): IQueryResult<number> =>
         });
         return {
             success: false,
+            error
         }
     }
 }
@@ -56,7 +57,7 @@ export const getAllPets = (): IQueryResult<IPet[]> =>
         const sql = 
         `
             SELECT * FROM ${table};
-        `
+        `;
 
         const result = dataBase.getAllSync<IPet>(sql);
 
@@ -72,6 +73,7 @@ export const getAllPets = (): IQueryResult<IPet[]> =>
         });
         return {
             success: false,
+            error
         };
     }
 }
@@ -89,7 +91,7 @@ export const updatePet = (pet: IPet): IQueryResult<number> =>
         observation  = ?,
         is_sync = 0
     WHERE id_prov = ?;
-    `
+    `;
 
     try {
         const values = 
@@ -117,6 +119,7 @@ export const updatePet = (pet: IPet): IQueryResult<number> =>
         });
         return {
             success: false,
+            error
         };
     }
 }
@@ -126,7 +129,7 @@ export const deletePet = (id_prov: number): IQueryResult<number> =>
     const sql = 
     `
         DELETE FROM ${table} WHERE id_prov = ? 
-    `
+    `;
 
     try {
         const values = [ id_prov ];
@@ -135,7 +138,7 @@ export const deletePet = (id_prov: number): IQueryResult<number> =>
 
         return {
             success: true,
-            data: result.changes
+            data: result.changes as number
         };
     } catch (error) {
         showError({
@@ -145,6 +148,7 @@ export const deletePet = (id_prov: number): IQueryResult<number> =>
         });
         return {
             success: false,
+            error
         };
     }
 }

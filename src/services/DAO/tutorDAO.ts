@@ -128,7 +128,7 @@ export const deleteTutor = (id_prov: number): IQueryResult<number> =>
 
         return {
             success: true,
-            data: result.changes
+            data: result.changes as number
         };
     } catch (error) {
         showError({
