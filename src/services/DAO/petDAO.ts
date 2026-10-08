@@ -1,52 +1,56 @@
+import { INewPet, IPet } from "../../@types/pet";
 import { IQueryResult } from "../../@types/queryResult";
-import { INewTutor, ITutor } from "../../@types/tutor";
-import { TABLE_TUTOR } from "../../constants/tables";
+import { TABLE_PET } from "../../constants/tables";
 import showError from "../log/showError";
 import dataBase from "../openDataBase";
 
-const table = TABLE_TUTOR;
+const table = TABLE_PET;
 
 // CRUD
-export const insertTutor = (tutor: INewTutor): IQueryResult<number> => 
+export const insertPet = (pet: INewPet): IQueryResult<number> =>
 {
     const sql = 
     `
     INSERT INTO ${table}(
         name,
-        phone,
-        email,
-        address
-    ) VALUES ( ?, ?, ?, ? );
+        birth_date,
+        race,
+        height,
+        weight,
+        observation
+    ) VALUES ( ?, ?, ?, ?, ?, ? );
     `
 
     try {
         const values = 
         [
-            tutor.name,
-            tutor.phone,
-            tutor.email || null,
-            tutor.address || null
+            pet.name,
+            pet.birth_date || null,
+            pet.race,
+            pet.height || null,
+            pet.weight || null,
+            pet.observation || null
         ];
 
         const result = dataBase.runSync( sql, values );
 
-        return {
+        return{
             success: true,
             data: result.lastInsertRowId
         }
     } catch (error) {
         showError({
-            file: "tutorDAO",
-            operation: "insertTutor",
+            file: "petDAO",
+            operation: "insertPet",
             error
         });
         return {
             success: false,
-        };
+        }
     }
 }
 
-export const getAllTutors = (): IQueryResult<ITutor[]> =>
+export const getAllPets = (): IQueryResult<IPet[]> =>
 {
     try {
         const sql = 
@@ -54,16 +58,16 @@ export const getAllTutors = (): IQueryResult<ITutor[]> =>
             SELECT * FROM ${table};
         `
 
-        const result = dataBase.getAllSync<ITutor>(sql);
+        const result = dataBase.getAllSync<IPet>(sql);
 
         return {
             success: true,
             data: result
-        };
+        }
     } catch (error) {
         showError({
-            file: "tutorDAO",
-            operation: "getAllTutors",
+             file: "petDAO",
+            operation: "getAllPets",
             error
         });
         return {
@@ -72,15 +76,17 @@ export const getAllTutors = (): IQueryResult<ITutor[]> =>
     }
 }
 
-export const updateTutor = (tutor: ITutor): IQueryResult<number> =>
+export const updatePet = (pet: IPet): IQueryResult<number> =>
 {
     const sql = 
     `
-    UPDATE ${table} SET
+    UPDATE TABLE ${table} SET
         name = ?,
-        phone = ?,
-        email = ?,
-        address = ?,
+        birth_date = ?,
+        race = ?,
+        height = ?,
+        weight = ?,
+        observation  = ?,
         is_sync = 0
     WHERE id_prov = ?;
     `
@@ -88,11 +94,13 @@ export const updateTutor = (tutor: ITutor): IQueryResult<number> =>
     try {
         const values = 
         [
-            tutor.name,
-            tutor.phone,
-            tutor.email || null,
-            tutor.address || null,
-            tutor.id_prov
+            pet.name,
+            pet.birth_date || null,
+            pet.race,
+            pet.height || null,
+            pet.weight || null,
+            pet.observation || null,
+            pet.id_prov
         ];
 
         const result = dataBase.runSync( sql, values );
@@ -103,8 +111,8 @@ export const updateTutor = (tutor: ITutor): IQueryResult<number> =>
         };
     } catch (error) {
         showError({
-            file: "tutorDAO",
-            operation: "updateTutor",
+            file: "petDAO",
+            operation: "updatePet",
             error
         });
         return {
@@ -113,16 +121,15 @@ export const updateTutor = (tutor: ITutor): IQueryResult<number> =>
     }
 }
 
-export const deleteTutor = (id_prov: number): IQueryResult<number> =>
+export const deletePet = (id_prov: number): IQueryResult<number> =>
 {
     const sql = 
-        `
-        DELETE FROM ${table} WHERE id_prov = ?
-        `
+    `
+        DELETE FROM ${table} WHERE id_prov = ? 
+    `
 
     try {
-        
-        const values = [ id_prov ]
+        const values = [ id_prov ];
 
         const result = dataBase.runSync( sql, values );
 
@@ -132,8 +139,8 @@ export const deleteTutor = (id_prov: number): IQueryResult<number> =>
         };
     } catch (error) {
         showError({
-            file: "tutorDAO",
-            operation: "deleteTutor",
+            file: "petDAO",
+            operation: "deletePet",
             error
         });
         return {
